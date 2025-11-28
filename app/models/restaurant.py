@@ -15,5 +15,4 @@ class RestaurantOrder(BaseModel):
     additional_note: Optional[str] = None
 
 class RestaurantTicket(BaseModel):
-    session_id: str
     orders: List[RestaurantOrder]

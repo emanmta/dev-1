@@ -10,3 +10,4 @@ pydantic
 python-dotenv
 fastapi-mcp
 pydantic-settings
+cryptography

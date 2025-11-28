@@ -21,5 +21,4 @@ class ComplaintOrder(BaseModel):
     additional_note: Optional[str] = None
 
 class ComplaintTicket(BaseModel):
-    session_id: str
     orders: List[ComplaintOrder]
