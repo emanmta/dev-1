@@ -1,0 +1,12 @@
+# requirements.txt
+#
+# To install these dependencies, run:
+# pip install -r requirements.txt
+
+fastapi
+uvicorn[standard]
+httpx
+pydantic
+python-dotenv
+fastapi-mcp
+pydantic-settings
