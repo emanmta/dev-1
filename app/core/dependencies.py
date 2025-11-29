@@ -1,4 +1,6 @@
 from fastapi import Header, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends
 from cryptography.fernet import Fernet, InvalidToken
 from app.core.config import settings
 import dotenv
@@ -37,3 +39,26 @@ def get_session_id_from_token(x_session_token: str = Header(...)):
             status_code=500,
             detail="An unexpected error occurred while processing the session token."
         )
+
+http_bearer = HTTPBearer()
+
+def validate_bearer_token(credentials: HTTPAuthorizationCredentials = Depends(http_bearer)):
+    """
+    A dependency that validates the static Fernet-encrypted bearer token.
+    """
+    if not settings.STATIC_BEARER_TOKEN:
+        raise HTTPException(
+            status_code=500,
+            detail="Bearer token is not configured on the server."
+        )
+    
+    # Clean the expected token from .env to remove potential quotes and whitespace
+    expected_token = settings.STATIC_BEARER_TOKEN.strip().strip('"').strip("'")
+    
+    if credentials.scheme != "Bearer" or credentials.credentials != expected_token:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or missing bearer token.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return True # Token is valid

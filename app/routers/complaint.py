@@ -10,7 +10,7 @@ router = APIRouter()
 @router.post("/tickets/complaint", name="create_complaint_ticket")
 async def forward_complaint_ticket(
     ticket: ComplaintTicket,
-    session_id: str = "eeaa7038-02d0-4a01-b5a1-1b7a83f55815"
+    session_id: str
 ):
     """
     Receives a complaint ticket, validates it, and forwards it

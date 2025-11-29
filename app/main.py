@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from app.routers import restaurant, complaint, message, order
 from fastapi_mcp import FastApiMCP
-# from app.core.dependencies import validate_bearer_token
+from app.core.dependencies import validate_bearer_token
 
 app = FastAPI(
     title="MCP-Ticket Forwarding Service",
@@ -10,11 +10,10 @@ app = FastAPI(
 )
 
 # Include the specific routers
-app.include_router(restaurant.router)
-app.include_router(complaint.router)
-app.include_router(message.router)
-app.include_router(order.router)
-# app.include_router(order.router, dependencies=[Depends(validate_bearer_token)])
+app.include_router(restaurant.router, dependencies=[Depends(validate_bearer_token)])
+app.include_router(complaint.router, dependencies=[Depends(validate_bearer_token)])
+app.include_router(message.router, dependencies=[Depends(validate_bearer_token)])
+app.include_router(order.router, dependencies=[Depends(validate_bearer_token)])
 
 @app.get("/")
 async def root():

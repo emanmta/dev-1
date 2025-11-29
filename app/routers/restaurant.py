@@ -10,7 +10,7 @@ router = APIRouter()
 @router.post("/tickets/restaurant", name="create_restaurant_ticket")
 async def forward_restaurant_ticket(
     ticket: RestaurantTicket,
-    session_id: str = "eeaa7038-02d0-4a01-b5a1-1b7a83f55815"
+    session_id: str
 ):
     """
     Receives a restaurant ticket, validates it, and forwards it
