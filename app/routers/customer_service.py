@@ -1,19 +1,19 @@
 import httpx
 from fastapi import APIRouter, HTTPException, Depends
 
-from app.models.restaurant import RestaurantTicket
+from app.models.customer_service import ComplaintTicket
 from app.core.config import settings
 from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
-@router.post("/tickets/restaurant", name="create_restaurant_ticket")
-async def forward_restaurant_ticket(
-    ticket: RestaurantTicket,
-    session_id: str = "eeaa7038-02d0-4a01-b5a1-1b7a83f55815"
+@router.post("/order/complaint", name="create_complaint_order")
+async def forward_complaint_ticket(
+    ticket: ComplaintTicket,
+    session_id: str = Depends(get_session_id_from_token)
 ):
     """
-    Receives a restaurant ticket, validates it, and forwards it
+    Receives a complaint ticket, validates it, and forwards it
     to the internal backend service's order webhook.
     """
     try:
