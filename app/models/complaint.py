@@ -22,4 +22,3 @@ class ComplaintOrder(BaseModel):
 
 class ComplaintTicket(BaseModel):
     orders: List[ComplaintOrder]
-    x_session_token: str

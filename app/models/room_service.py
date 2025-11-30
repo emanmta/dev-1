@@ -16,4 +16,3 @@ class RestaurantOrder(BaseModel):
 
 class RestaurantTicket(BaseModel):
     orders: List[RestaurantOrder]
-    x_session_token: str

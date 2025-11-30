@@ -7,10 +7,9 @@ import dotenv
 import base64
 
 def get_session_id_from_token(
-    x_session_token_header: str | None = Header(None, alias="x-session-token"),
-    x_session_token_cookie: str | None = Cookie(None, alias="x-session-token")
+    x_session_token_header: str | None = Header(None, alias="x-session-token")
 ):
-    x_session_token = x_session_token_header or x_session_token_cookie
+    x_session_token = x_session_token_header
     if x_session_token is None:
         raise HTTPException(
             status_code=400,
