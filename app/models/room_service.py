@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import Optional, List, Union
 
 class Item(BaseModel):
@@ -13,6 +13,11 @@ class RestaurantOrder(BaseModel):
     items: List[Item]
     note: Optional[str] = None
     additional_note: Optional[str] = None
+
+    @validator("category", pre=True, always=True)
+    def set_category_default(cls, v):
+        """Set default category if None or not provided."""
+        return v or "restaurant"
 
 class RestaurantTicket(BaseModel):
     orders: List[RestaurantOrder]

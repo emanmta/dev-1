@@ -33,8 +33,8 @@ async def list_orders(
             detail=exc.response.json()
         )
 
-@router.get("/webhook/orders/{order_number}", name="get_order_detail")
-async def get_order_detail(
+@router.get("/webhook/orders/{order_number}", name="get_order")
+async def get_order(
     order_number: str
 ):
     """
