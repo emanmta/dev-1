@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from cryptography.fernet import Fernet, InvalidToken
 from app.core.config import settings
+from app.core.dependencies import validate_bearer_token
 import base64
 
 router = APIRouter()
@@ -13,7 +14,10 @@ class DecodedSession(BaseModel):
     session_id: str
 
 @router.post("/sessions/decode", response_model=DecodedSession, name="decode_session")
-async def decode_session_id(payload: EncryptedSession):
+async def decode_session_id(
+    payload: EncryptedSession,
+    is_authenticated: bool = Depends(validate_bearer_token)
+):
     """
     Receives a Fernet-encrypted session ID, decrypts it,
     and returns the original session ID.

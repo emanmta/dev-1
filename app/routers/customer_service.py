@@ -1,13 +1,13 @@
 import httpx
 from fastapi import APIRouter, HTTPException, Depends
 
-from app.models.customer_service import ComplaintTicket
+from app.models.complaint import ComplaintTicket
 from app.core.config import settings
 from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
-@router.post("/order/complaint", name="create_complaint_order")
+@router.post("/tickets/complaint", name="create_complaint_ticket")
 async def forward_complaint_ticket(
     ticket: ComplaintTicket,
     session_id: str = Depends(get_session_id_from_token)
@@ -23,7 +23,10 @@ async def forward_complaint_ticket(
                 json={"session_id": session_id, **ticket.dict()}
             )
             response.raise_for_status()
-            return response.json()
+            response_data = response.json()
+            if "order_numbers" in response_data and isinstance(response_data.get("order_numbers"), list):
+                response_data["order_numbers"] = [f"#{order}" for order in response_data["order_numbers"]]
+            return response_data
     except httpx.RequestError as exc:
         raise HTTPException(
             status_code=502,

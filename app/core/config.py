@@ -13,5 +13,6 @@ class Settings(BaseSettings):
     FERNET_KEY: str = os.getenv("FERNET_KEY", "")
     BEARER_FERNET_KEY: str = os.getenv("BEARER_FERNET_KEY", "")
     STATIC_BEARER_TOKEN: str = os.getenv("STATIC_BEARER_TOKEN", "")
+    x_session_token : str = os.getenv("X_SESSION_TOKEN","")
 
 settings = Settings()
