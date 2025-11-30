@@ -1,4 +1,4 @@
-from fastapi import Header, HTTPException
+from fastapi import Header, HTTPException, Cookie
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends
 from cryptography.fernet import Fernet, InvalidToken
@@ -6,7 +6,16 @@ from app.core.config import settings
 import dotenv
 import base64
 
-def get_session_id_from_token(x_session_token: str = Header(...)):
+def get_session_id_from_token(
+    x_session_token_header: str | None = Header(None, alias="x-session-token"),
+    x_session_token_cookie: str | None = Cookie(None, alias="x-session-token")
+):
+    x_session_token = x_session_token_header or x_session_token_cookie
+    if x_session_token is None:
+        raise HTTPException(
+            status_code=400,
+            detail="X-Session-Token header or cookie is missing."
+        )
     """
     A FastAPI dependency that extracts, decrypts, and returns the session ID
     from the X-Session-Token header.
