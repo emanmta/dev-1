@@ -3,15 +3,14 @@ from fastapi import APIRouter, HTTPException, Depends
 
 from app.models.restaurant import RestaurantTicket
 from app.core.config import settings
-from app.core.dependencies import get_session_id_from_token, validate_bearer_token
+from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
 @router.post("/tickets/restaurant", name="create_restaurant_ticket")
 async def forward_restaurant_ticket(
     ticket: RestaurantTicket,
-    session_id: str = Depends(get_session_id_from_token),
-    is_authenticated: bool = Depends(validate_bearer_token)
+    session_id: str = Depends(get_session_id_from_token)
 ):
     """
     Receives a restaurant ticket, validates it, and forwards it

@@ -3,14 +3,13 @@ from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
 from app.core.config import settings
-from app.core.dependencies import get_session_id_from_token, validate_bearer_token
+from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
 @router.get("/webhook/orders", name="list_orders_by_session")
 async def list_orders(
-    session_id: str = Depends(get_session_id_from_token),
-    is_authenticated: bool = Depends(validate_bearer_token)
+    session_id: str = Depends(get_session_id_from_token)
 ):
     """
     Retrieves a list of orders from the backend, filtered by session_id.
@@ -36,8 +35,7 @@ async def list_orders(
 
 @router.get("/webhook/orders/{order_number}", name="get_order_detail")
 async def get_order_detail(
-    order_number: str,
-    is_authenticated: bool = Depends(validate_bearer_token)
+    order_number: str
 ):
     """
     Retrieves a single order from the backend by its order_number.

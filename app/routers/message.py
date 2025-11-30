@@ -3,15 +3,14 @@ from fastapi import APIRouter, HTTPException, Depends
 
 from app.models.message import SendMessage
 from app.core.config import settings
-from app.core.dependencies import get_session_id_from_token, validate_bearer_token
+from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
 @router.post("/send-message", name="send_whatsapp_message")
 async def forward_send_message(
     payload: SendMessage,
-    session_id: str = Depends(get_session_id_from_token),
-    is_authenticated: bool = Depends(validate_bearer_token)
+    session_id: str = Depends(get_session_id_from_token)
 ):
     """
     Receives a message payload, validates it, and forwards it
