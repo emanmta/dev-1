@@ -16,7 +16,7 @@ class DecodedSession(BaseModel):
 @router.post("/sessions/decode", response_model=DecodedSession, name="decode_session")
 async def decode_session_id(
     payload: EncryptedSession,
-    is_authenticated: bool = Depends(validate_bearer_token)
+    # is_authenticated: bool = Depends(validate_bearer_token)
 ):
     """
     Receives a Fernet-encrypted session ID, decrypts it,

@@ -1,19 +1,22 @@
 import httpx
-from fastapi import APIRouter, HTTPException, Depends
+import httpx
+from fastapi import APIRouter, HTTPException, Request
 from uuid import UUID
 
 from app.core.config import settings
-from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
 @router.get("/webhook/orders", name="list_orders_by_session")
 async def list_orders(
-    session_id: str = Depends(get_session_id_from_token)
+    request: Request
 ):
     """
-    Retrieves a list of orders from the backend, filtered by session_id.
+    Retrieves a list of orders from the backend, filtered by the session_id
+    from the authenticated request state.
     """
+    session_id = request.state.session_id
+
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(
@@ -35,11 +38,15 @@ async def list_orders(
 
 @router.get("/webhook/orders/{order_number}", name="get_order")
 async def get_order(
+    request: Request,
     order_number: str
 ):
     """
     Retrieves a single order from the backend by its order_number.
+    The request is authenticated by the session middleware.
     """
+    # The middleware has already validated the session.
+    # We can proceed directly with the business logic.
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(

@@ -1,21 +1,23 @@
 import httpx
-from fastapi import APIRouter, HTTPException, Depends
+import httpx
+from fastapi import APIRouter, HTTPException, Request
 
 from app.models.message import SendMessage
 from app.core.config import settings
-from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
 @router.post("/send-message", name="send_whatsapp_message")
 async def forward_send_message(
-    payload: SendMessage,
-    session_id: str = Depends(get_session_id_from_token)
+    request: Request,
+    payload: SendMessage
 ):
     """
-    Receives a message payload, validates it, and forwards it
-    to the internal backend service.
+    Receives a message payload and forwards it to the internal backend,
+    using the session_id from the authenticated request state.
     """
+    session_id = request.state.session_id
+
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(

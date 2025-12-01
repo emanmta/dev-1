@@ -1,21 +1,23 @@
 import httpx
-from fastapi import APIRouter, HTTPException, Depends
+import httpx
+from fastapi import APIRouter, HTTPException, Request
 
 from app.models.complaint import ComplaintTicket
 from app.core.config import settings
-from app.core.dependencies import get_session_id_from_token
 
 router = APIRouter()
 
 @router.post("/tickets/complaint", name="create_complaint_ticket")
 async def forward_complaint_ticket(
-    ticket: ComplaintTicket,
-    session_id: str = Depends(get_session_id_from_token)
+    request: Request,
+    ticket: ComplaintTicket
 ):
     """
-    Receives a complaint ticket, validates it, and forwards it
-    to the internal backend service's order webhook.
+    Receives a complaint ticket and forwards it to the internal backend,
+    using the session_id from the authenticated request state.
     """
+    session_id = request.state.session_id
+
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(
