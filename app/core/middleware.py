@@ -6,7 +6,9 @@ from app.core.dependencies import decrypt_session_token
 class SessionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # Bypass middleware for the root path and docs
-        if request.url.path in ["/", "/docs", "/openapi.json"]:
+        # Check if the request path starts with any of the excluded paths
+        excluded_paths = ["/", "/docs", "/openapi.json", "/mcp/resto", "/mcp/complain", "/mcp/list_orders", "/mcp/get_order"]
+        if any(request.url.path.startswith(p) for p in excluded_paths):
             return await call_next(request)
 
         encrypted_token = request.headers.get("x-session-token")

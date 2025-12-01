@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List, Union
+from enum import Enum
 
 class Item(BaseModel):
     title: str
@@ -8,11 +9,22 @@ class Item(BaseModel):
     price: Optional[Union[float, int]] = None
     note: Optional[str] = None
 
+class RestaurantCategory(str, Enum):
+    restaurant = "restaurant"
+    room_service = "room_service"
+
 class RestaurantOrder(BaseModel):
-    category: str = "room_service"
+    category: Optional[RestaurantCategory] = RestaurantCategory.room_service
     items: List[Item]
     note: Optional[str] = None
     additional_note: Optional[str] = None
 
 class RestaurantTicket(BaseModel):
     orders: List[RestaurantOrder]
+
+class MCPRestaurantTicket(RestaurantTicket):
+    """
+    A special ticket model for the MCP proxy that includes the session token
+    directly in the request body.
+    """
+    session_token: str

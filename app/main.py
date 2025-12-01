@@ -27,7 +27,10 @@ async def root():
     return {"status": "ok", "message": "MCP-Ticket Service is running"}
 
 # This is the MCP wrapper around our existing FastAPI app
-mcp_app = FastApiMCP(app)
+mcp_app = FastApiMCP(
+    app,
+    headers=["X-Session-Token"]
+    )
 
 # Add the MCP-specific endpoints (/mcp and /mcp/sse)
 mcp_app.mount_http()
