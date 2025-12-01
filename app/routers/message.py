@@ -5,9 +5,9 @@ from fastapi import APIRouter, HTTPException, Request
 from app.models.message import SendMessage
 from app.core.config import settings
 
-router = APIRouter()
+router = APIRouter(tags=["Actions"])
 
-@router.post("/send-message", name="send_whatsapp_message")
+@router.post("/webhook/send-message", name="send_whatsapp_message")
 async def forward_send_message(
     request: Request,
     payload: SendMessage
@@ -21,7 +21,7 @@ async def forward_send_message(
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(
-                f"{settings.BASE_URL}/send-message",
+                f"{settings.BASE_URL}/webhook/send-message",
                 json={"session_id": session_id, **payload.dict()}
             )
             response.raise_for_status()

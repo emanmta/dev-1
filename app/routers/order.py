@@ -5,7 +5,7 @@ from uuid import UUID
 
 from app.core.config import settings
 
-router = APIRouter()
+router = APIRouter(tags=["Actions"])
 
 @router.get("/webhook/orders", name="list_orders_by_session")
 async def list_orders(
@@ -53,6 +53,14 @@ async def get_order(
                 f"{settings.BASE_URL}/webhook/orders/{order_number}"
             )
             response.raise_for_status()
+            
+            # Handle empty response from backend
+            if not response.content:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Order '{order_number}' not found in the backend."
+                )
+            
             return response.json()
     except httpx.RequestError as exc:
         raise HTTPException(
