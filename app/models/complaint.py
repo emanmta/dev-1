@@ -22,10 +22,3 @@ class ComplaintOrder(BaseModel):
 
 class ComplaintTicket(BaseModel):
     orders: List[ComplaintOrder]
-
-class MCPComplaintTicket(ComplaintTicket):
-    """
-    A special ticket model for the MCP proxy that includes the session token
-    directly in the request body for complaint tickets.
-    """
-    session_token: str

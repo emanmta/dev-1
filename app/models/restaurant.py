@@ -21,10 +21,3 @@ class RestaurantOrder(BaseModel):
 
 class RestaurantTicket(BaseModel):
     orders: List[RestaurantOrder]
-
-class MCPRestaurantTicket(RestaurantTicket):
-    """
-    A special ticket model for the MCP proxy that includes the session token
-    directly in the request body.
-    """
-    session_token: str

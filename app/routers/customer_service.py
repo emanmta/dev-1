@@ -1,19 +1,23 @@
 import httpx
 from fastapi import APIRouter, HTTPException, Request
 
-from app.models.complaint import ComplaintTicket, MCPComplaintTicket
+from app.models.complaint import ComplaintTicket
 from app.core.config import settings
-from app.core.dependencies import decrypt_session_token
 
-router = APIRouter()
+router = APIRouter(tags=["Actions"])
 
-
-async def _forward_and_process_complaint(session_id: str, ticket_data: dict):
+@router.post("/tickets/complaint", name="create_complaint")
+async def forward_complaint_ticket(
+    request: Request,
+    ticket: ComplaintTicket
+):
     """
-    Helper function to forward a complaint ticket to the backend and process the response.
+    Receives a complaint ticket and forwards it to the internal backend,
+    using the session_id from the authenticated request state.
     """
-    payload = {"session_id": session_id, **ticket_data}
-    
+    session_id = request.state.session_id
+    payload = {"session_id": session_id, **ticket.dict()}
+
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(
@@ -39,30 +43,3 @@ async def _forward_and_process_complaint(session_id: str, ticket_data: dict):
             status_code=exc.response.status_code,
             detail=detail
         )
-
-@router.post("/tickets/complaint", name="create_complaint_ticket", include_in_schema=False)
-async def forward_complaint_ticket(
-    request: Request,
-    ticket: ComplaintTicket
-):
-    """
-    Receives a complaint ticket and forwards it to the internal backend.
-    """
-    session_id = request.state.session_id
-    return await _forward_and_process_complaint(session_id, ticket.dict())
-
-
-@router.post("/mcp/complain", name="make_complaint")
-async def mcp_proxy_complaint_ticket(
-    ticket: MCPComplaintTicket
-):
-    """
-    A proxy endpoint for the MCP framework for creating complaint tickets.
-    """
-    try:
-        session_id = decrypt_session_token(ticket.session_token)
-    except ValueError as e:
-        raise HTTPException(status_code=401, detail=str(e))
-
-    ticket_data = ticket.dict(exclude={"session_token"})
-    return await _forward_and_process_complaint(session_id, ticket_data)

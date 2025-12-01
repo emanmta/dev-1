@@ -29,8 +29,9 @@ async def root():
 # This is the MCP wrapper around our existing FastAPI app
 mcp_app = FastApiMCP(
     app,
-    headers=["X-Session-Token"]
-    )
+    headers=["X-Session-Token"],
+    include_tags=["Actions"]
+)
 
 # Add the MCP-specific endpoints (/mcp and /mcp/sse)
 mcp_app.mount_http()

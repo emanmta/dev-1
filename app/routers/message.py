@@ -32,7 +32,11 @@ async def forward_send_message(
             detail=f"Error connecting to the backend service: {exc}"
         )
     except httpx.HTTPStatusError as exc:
+        try:
+            detail = exc.response.json()
+        except Exception:
+            detail = exc.response.text
         raise HTTPException(
             status_code=exc.response.status_code,
-            detail=exc.response.json()
+            detail=detail
         )
