@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
-from app.routers import customer_service, restaurant, message, order
+from app.routers import customer_service, restaurant, message, order, waha
 from fastapi_mcp import FastApiMCP
 from app.core.middleware import SessionMiddleware
 
@@ -18,6 +18,7 @@ app.include_router(restaurant.router)
 app.include_router(customer_service.router)
 app.include_router(message.router)
 app.include_router(order.router)
+app.include_router(waha.router)
 
 @app.get("/")
 async def root():
