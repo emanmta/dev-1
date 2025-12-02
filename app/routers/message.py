@@ -8,21 +8,22 @@ from app.core.config import settings
 router = APIRouter(tags=["Actions"])
 
 @router.post("/webhook/send-message", name="send_whatsapp_message")
-async def forward_send_message(
+async def send_whatsapp_message(
     request: Request,
     payload: SendMessage
 ):
     """
-    Receives a message payload and forwards it to the internal backend,
-    using the session_id from the authenticated request state.
+    Receives a message, retrieves the session from the request state,
+    gets the user's phone number, and sends the message via WAHA.
     """
     session_id = request.state.session_id
-
+    
+    # Forward the request to the internal backend service
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(
                 f"{settings.BASE_URL}/webhook/send-message",
-                json={"session_id": session_id, **payload.dict()}
+                json={"session_id": str(session_id), "message": payload.message}
             )
             response.raise_for_status()
             return response.json()
