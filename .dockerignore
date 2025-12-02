@@ -1,0 +1,26 @@
+# Docker
+Dockerfile
+.dockerignore
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+
+# Environment files
+*.env
+
+# IDE / Editor specific
+.idea/
+.vscode/
+
+# Test and example files
+test.ipynb
+crypto_test.py
+client_example.py
