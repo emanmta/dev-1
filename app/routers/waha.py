@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from app.models.waha import WahaWebhook
 
-router = APIRouter(tags=["Webhook"])
+router = APIRouter(tags=["Actions"])
 
 @router.post("/webhook/waha", name="waha_webhook")
 async def waha_webhook(
