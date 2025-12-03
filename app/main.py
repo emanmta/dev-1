@@ -3,6 +3,11 @@ from fastapi.openapi.utils import get_openapi
 from app.routers import customer_service, restaurant, message, order, waha
 from fastapi_mcp import FastApiMCP
 from app.core.middleware import SessionMiddleware
+from app.core.logging_config import setup_logging
+
+
+# Setup logging
+setup_logging()
 
 app = FastAPI(
     title="MCP-Ticket Forwarding Service",

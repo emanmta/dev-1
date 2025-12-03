@@ -1,9 +1,11 @@
 import httpx
-import httpx
+import logging
 from fastapi import APIRouter, HTTPException, Request
 
 from app.models.message import SendMessage
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["Actions"])
 
@@ -17,6 +19,9 @@ async def send_whatsapp_message(
     gets the user's phone number, and sends the message via WAHA.
     """
     session_id = request.state.session_id
+
+    # Logger
+    logger.info(f"Received send message request for session_id: {session_id}, with message:'{payload.message}'")
     
     # Forward the request to the internal backend service
     try:
@@ -28,6 +33,7 @@ async def send_whatsapp_message(
             response.raise_for_status()
             return response.json()
     except httpx.RequestError as exc:
+        logger.error(f"Request error while connecting to backend: {exc}")
         raise HTTPException(
             status_code=502,
             detail=f"Error connecting to the backend service: {exc}"
@@ -37,6 +43,7 @@ async def send_whatsapp_message(
             detail = exc.response.json()
         except Exception:
             detail = exc.response.text
+        logger.error(f"Backend service returned an error: {detail}")
         raise HTTPException(
             status_code=exc.response.status_code,
             detail=detail
