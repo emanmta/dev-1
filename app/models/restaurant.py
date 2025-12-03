@@ -14,7 +14,7 @@ class RestaurantCategory(str, Enum):
     room_service = "room_service"
 
 class RestaurantOrder(BaseModel):
-    category: Optional[RestaurantCategory] = RestaurantCategory.room_service
+    category: Optional[RestaurantCategory]
     items: List[Item]
     note: Optional[str] = None
     additional_note: Optional[str] = None

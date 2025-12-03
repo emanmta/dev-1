@@ -6,7 +6,7 @@ load_dotenv()
 
 class Settings(BaseSettings):
     APP_HOST: str = os.getenv("APP_HOST", "127.0.0.1")
-    APP_PORT: int = int(os.getenv("APP_PORT", 8000))
+    APP_PORT: int = int(os.getenv("APP_PORT", 8047))
     BASE_URL: str = os.getenv("BASE_URL", "")
 
     FERNET_KEY: str = os.getenv("FERNET_KEY", "")
