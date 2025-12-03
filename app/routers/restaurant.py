@@ -18,11 +18,11 @@ async def forward_restaurant_ticket(
     session_id = request.state.session_id
     payload = {"session_id": session_id, **ticket.dict()}
 
-    # Map 'restaurant' category to 'room_service' for backend compatibility, as the backend rejects 'restaurant'.
-    if "orders" in payload:
-        for order in payload["orders"]:
-            if order.get("category") == "restaurant":
-                order["category"] = "room_service"
+    # # Map 'restaurant' category to 'room_service' for backend compatibility, as the backend rejects 'restaurant'.
+    # if "orders" in payload:
+    #     for order in payload["orders"]:
+    #         if order.get("category") == "restaurant":
+    #             order["category"] = "room_service"
 
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:

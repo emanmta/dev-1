@@ -3,7 +3,7 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 
 # The session ID you want to encrypt
-SESSION_ID_TO_ENCRYPT = "74cbec76-9fad-487b-9041-120a1c121f6f"
+SESSION_ID_TO_ENCRYPT = "57c006d0-0484-4ef6-8833-23cb440cb0ba"
 
 def encrypt_session():
     """
