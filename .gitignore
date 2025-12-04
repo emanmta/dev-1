@@ -14,3 +14,7 @@ docker-compose.yaml
 # Lainnya
 .env
 README.md
+
+# Env
+*.env
+
