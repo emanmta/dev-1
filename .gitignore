@@ -1,1 +1,16 @@
-*.env
+# Git
+.git
+.gitignore
+
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Docker
+Dockerfile
+docker-compose.yaml
+
+# Lainnya
+.env
+README.md

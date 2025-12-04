@@ -32,7 +32,7 @@ COPY . .
 RUN mkdir -p app/data
 
 # Expose the application port
-EXPOSE 7330
+EXPOSE 8047
 
 # Run the application
 CMD ["python", "manage.py"]
